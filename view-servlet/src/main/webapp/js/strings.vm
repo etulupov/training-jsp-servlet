@@ -1,0 +1,37 @@
+$(document).ready(function () {
+$('#add-form').bootstrapValidator({
+fields: {
+first_name: {
+validators: {
+notEmpty: {
+message: '$lang.getString("first_name_empty")'
+}
+}
+},
+last_name: {
+validators: {
+notEmpty: {
+message: '$lang.getString("last_name_empty")'
+}
+}
+},
+email: {
+validators: {
+notEmpty: {
+message: '$lang.getString("email_empty")'
+},
+emailAddress: {
+message: '$lang.getString("email_wrong")'
+}
+}
+},
+message: {
+validators: {
+notEmpty: {
+message: '$lang.getString("message_empty")'
+}
+}
+}
+}
+});
+});

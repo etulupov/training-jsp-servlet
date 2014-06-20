@@ -1,0 +1,20 @@
+body {
+    padding-top: 50px;
+}
+
+.main {
+    padding: 40px 15px;
+
+}
+
+.list-group-item-hint {
+    color: #aaa;
+    font-size: 10px;
+}
+
+.pages {
+    width: 100%;
+    float: left;
+
+    text-align: center;
+}
