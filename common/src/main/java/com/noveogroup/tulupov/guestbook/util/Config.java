@@ -11,7 +11,7 @@ import java.util.Properties;
  * Config holder.
  */
 public final class Config {
-    public static final Config INSTANCE = new Config();
+    private static volatile Config INSTANCE;
     private static final Logger LOGGER = Logger.getLogger(Config.class);
     private Properties properties;
 
@@ -37,7 +37,16 @@ public final class Config {
 
 
     public static Config getInstance() {
-        return INSTANCE;
+        Config result = INSTANCE;
+        if (result == null) {
+            synchronized (Config.class) {
+                result = INSTANCE;
+                if (result == null) {
+                    INSTANCE = result = new Config();
+                }
+            }
+        }
+        return result;
     }
 
     public String getJdbcUrl() {
