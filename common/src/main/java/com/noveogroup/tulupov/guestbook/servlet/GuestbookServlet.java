@@ -50,7 +50,7 @@ public class GuestbookServlet extends AbstractServlet {
 
     private void fillForm(final HttpServletRequest request) {
         final String[] params = {PARAM_FIRST_NAME, PARAM_LAST_NAME, PARAM_EMAIL, PARAM_MESSAGE};
-        final HttpSession session = request.getSession(true);
+        final HttpSession session = request.getSession();
         for (String paramName : params) {
             request.setAttribute(paramName, session.getAttribute(paramName));
             session.removeAttribute(paramName);
