@@ -3,7 +3,19 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
          version="3.0">
+    <filter>
+        <filter-name>OldBrowserFilter</filter-name>
+        <filter-class>com.noveogroup.tulupov.guestbook.filter.OldBrowserFilter</filter-class>
+        <init-param>
+            <param-name>regexp</param-name>
+            <param-value>.*MSIE.*</param-value>
+        </init-param>
+    </filter>
 
+    <filter-mapping>
+        <filter-name>OldBrowserFilter</filter-name>
+        <url-pattern>*</url-pattern>
+    </filter-mapping>
 
     <servlet>
         <servlet-name>velocity</servlet-name>
