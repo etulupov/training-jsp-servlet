@@ -11,19 +11,24 @@ import javax.servlet.annotation.WebFilter;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Inits servlet context.
+ */
 @WebFilter(filterName = "DaoServletFilter", urlPatterns = "*")
 public class DaoServletFilter implements Filter {
-    private static final Logger LOGGER = Logger.getLogger(DaoServletFilter.class);
-
     public static final String GUESTBOOK_ENTRY_DAO = "guestbook_entry_dao";
+
+    private static final Logger LOGGER = Logger.getLogger(DaoServletFilter.class);
 
     public void destroy() {
 
     }
 
-    public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws ServletException, IOException {
-        ServletContext context = req.getServletContext();
-        ConnectionSource connectionSource = (ConnectionSource) context.getAttribute(ContextListener.CONNECTION_SOURCE);
+    public void doFilter(final ServletRequest req, final ServletResponse resp, final FilterChain chain) throws
+            ServletException, IOException {
+        final ServletContext context = req.getServletContext();
+        final ConnectionSource connectionSource =
+                (ConnectionSource) context.getAttribute(ContextListener.CONNECTION_SOURCE);
 
         try {
             req.setAttribute(GUESTBOOK_ENTRY_DAO, new GuestbookEntryDaoImpl(connectionSource));
@@ -34,7 +39,7 @@ public class DaoServletFilter implements Filter {
         chain.doFilter(req, resp);
     }
 
-    public void init(FilterConfig config) throws ServletException {
+    public void init(final FilterConfig config) throws ServletException {
 
     }
 

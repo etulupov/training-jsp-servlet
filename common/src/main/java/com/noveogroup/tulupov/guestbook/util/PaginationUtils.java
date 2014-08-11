@@ -6,20 +6,22 @@ import com.noveogroup.tulupov.guestbook.model.Page;
 import java.util.ArrayList;
 import java.util.List;
 
-public class PaginationUtils {
+/**
+ * Pagination utils.
+ */
+public final class PaginationUtils {
     private PaginationUtils() {
         throw new UnsupportedOperationException();
     }
 
-    public static List<Page> paginize(long total, long limit, long current) {
-
+    public static List<Page> paginize(final long total, final long limit, final long current) {
         if (total == 0) {
             return null;
         }
 
-        List<Page> pages = new ArrayList<Page>();
+        final List<Page> pages = new ArrayList<Page>();
 
-        long pageCount = (total + limit - 1) / limit;
+        final long pageCount = (total + limit - 1) / limit;
 
         Page page = new Page();
         page.setNumber(Math.max(current - 1, 0));

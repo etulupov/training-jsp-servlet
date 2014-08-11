@@ -6,7 +6,6 @@ import com.noveogroup.tulupov.guestbook.listener.SessionListener;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.model.Page;
 import com.noveogroup.tulupov.guestbook.util.Config;
-import com.noveogroup.tulupov.guestbook.util.Const;
 import com.noveogroup.tulupov.guestbook.util.PaginationUtils;
 import org.apache.log4j.Logger;
 
@@ -19,22 +18,29 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
 
-
-public class GuestbookServlet extends BaseServlet {
+/**
+ * Main page.
+ */
+public class GuestbookServlet extends AbstractServlet {
     private static final Logger LOGGER = Logger.getLogger(GuestbookServlet.class);
+    private static final String PARAM_FIRST_NAME = "first_name";
+    private static final String PARAM_LAST_NAME = "last_name";
+    private static final String PARAM_EMAIL = "email";
+    private static final String PARAM_MESSAGE = "message";
+    private static final String PARAM_PAGE_INVALID = "page_invalid";
 
-    private long getPageParam(HttpServletRequest request) {
-        String param = request.getParameter("page");
+    private long getPageParam(final HttpServletRequest request) {
+        final String param = request.getParameter("page");
 
         if (param != null) {
             try {
-                long value = Long.valueOf(param);
+                final long value = Long.valueOf(param);
                 if (value < 0) {
-                    throw new RuntimeException(getString(request, "page_invalid"));
+                    throw new RuntimeException(getString(request, PARAM_PAGE_INVALID));
                 }
                 return value;
             } catch (NumberFormatException e) {
-                throw new RuntimeException(getString(request, "page_invalid"));
+                throw new RuntimeException(getString(request, PARAM_PAGE_INVALID));
             }
         }
 
@@ -42,16 +48,16 @@ public class GuestbookServlet extends BaseServlet {
     }
 
 
-    private void fillForm(HttpServletRequest request) {
-        String[] params = {"first_name", "last_name", "email", "message" };
-        HttpSession session = request.getSession(true);
+    private void fillForm(final HttpServletRequest request) {
+        final String[] params = {PARAM_FIRST_NAME, PARAM_LAST_NAME, PARAM_EMAIL, PARAM_MESSAGE};
+        final HttpSession session = request.getSession(true);
         for (String paramName : params) {
             request.setAttribute(paramName, session.getAttribute(paramName));
             session.removeAttribute(paramName);
         }
 
         for (String paramName : params) {
-            String value = (String) request.getAttribute(paramName);
+            final String value = (String) request.getAttribute(paramName);
             if (value == null) {
                 request.setAttribute(paramName, "");
             }
@@ -59,14 +65,15 @@ public class GuestbookServlet extends BaseServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws
+            ServletException, IOException {
         super.doGet(request, response);
         fillForm(request);
         restoreAttributes(request);
-        GuestbookEntryDao guestbookEntryDao = (GuestbookEntryDao) request.getAttribute(DaoServletFilter.GUESTBOOK_ENTRY_DAO);
+        final GuestbookEntryDao guestbookEntryDao =
+                (GuestbookEntryDao) request.getAttribute(DaoServletFilter.GUESTBOOK_ENTRY_DAO);
         try {
-
-            long total = guestbookEntryDao.getCount();
+            final long total = guestbookEntryDao.getCount();
             long page = 0;
             try {
 
@@ -75,12 +82,12 @@ public class GuestbookServlet extends BaseServlet {
                 addErrorMessage(request, e.getMessage());
             }
 
-            Config config = Config.getInstance();
+            final Config config = Config.getInstance();
 
-            long offset = config.getPageLimit() * page;
-            List<Page> pages = PaginationUtils.paginize(total, config.getPageLimit(), page);
+            final long offset = config.getPageLimit() * page;
+            final List<Page> pages = PaginationUtils.paginize(total, config.getPageLimit(), page);
 
-            List<GuestbookEntry> entries = guestbookEntryDao.getEntries(offset, Const.ENTRIES_PER_PAGE);
+            final List<GuestbookEntry> entries = guestbookEntryDao.getEntries(offset, config.getPageLimit());
 
             request.setAttribute("rootUrl", request.getContextPath());
             request.setAttribute("entries", entries);
@@ -88,7 +95,7 @@ public class GuestbookServlet extends BaseServlet {
             request.setAttribute("sessions", SessionListener.getActiveSessions());
 
 
-            RequestDispatcher requestDispatcher = request.getRequestDispatcher(uiControllerName);
+            final RequestDispatcher requestDispatcher = request.getRequestDispatcher(uiControllerName);
             requestDispatcher.forward(request, response);
 
         } catch (SQLException e) {

@@ -14,8 +14,10 @@ import java.util.List;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-
-public abstract class BaseServlet extends HttpServlet {
+/**
+ * Base servlet.
+ */
+public abstract class AbstractServlet extends HttpServlet {
     public static final String LANGUAGE = "language";
     public static final String LANGUAGE_MAP = "lang";
     public static final String ERROR = "error";
@@ -24,11 +26,11 @@ public abstract class BaseServlet extends HttpServlet {
 
     protected String uiControllerName;
 
-    public void init(ServletConfig servletConfig) throws ServletException {
+    public void init(final ServletConfig servletConfig) throws ServletException {
         this.uiControllerName = servletConfig.getInitParameter("ui");
     }
 
-    protected void addErrorMessage(HttpServletRequest request, String message) {
+    protected void addErrorMessage(final HttpServletRequest request, final String message) {
         List<String> errors = (List<String>) request.getAttribute(ERROR);
         if (errors == null) {
             errors = new ArrayList<>();
@@ -37,23 +39,23 @@ public abstract class BaseServlet extends HttpServlet {
         errors.add(message);
     }
 
-    private void initLocalization(HttpServletRequest request) {
-        ResourceBundle langBundle = getResourceBundle(request);
+    private void initLocalization(final HttpServletRequest request) {
+        final ResourceBundle langBundle = getResourceBundle(request);
         request.setAttribute(LANGUAGE_MAP, langBundle);
     }
 
-    protected void saveAttributes(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
-        String[] names = {ERROR, SUCCESS};
+    protected void saveAttributes(final HttpServletRequest request) {
+        final HttpSession session = request.getSession(true);
+        final String[] names = {ERROR, SUCCESS};
         for (String name : names) {
             session.setAttribute(name, request.getAttribute(name));
         }
     }
 
-    protected void restoreAttributes(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
+    protected void restoreAttributes(final HttpServletRequest request) {
+        final HttpSession session = request.getSession(true);
 
-        String[] names = {ERROR, SUCCESS};
+        final String[] names = {ERROR, SUCCESS};
         for (String name : names) {
             request.setAttribute(name, session.getAttribute(name));
             session.removeAttribute(name);
@@ -62,23 +64,25 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws
+            ServletException, IOException {
         initLocalization(request);
     }
 
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doPost(final HttpServletRequest request, final HttpServletResponse response) throws
+            ServletException, IOException {
         initLocalization(request);
     }
 
-    protected void setSuccess(HttpServletRequest request, String message) {
+    protected void setSuccess(final HttpServletRequest request, final String message) {
         request.setAttribute(SUCCESS, message);
     }
 
-    private String getLanguage(HttpServletRequest request) {
-        HttpSession session = request.getSession(true);
+    private String getLanguage(final HttpServletRequest request) {
+        final HttpSession session = request.getSession(true);
 
-        String language = request.getParameter("language");
+        String language = request.getParameter(LANGUAGE);
 
         if (language != null) {
             session.setAttribute(LANGUAGE, language);
@@ -94,11 +98,11 @@ public abstract class BaseServlet extends HttpServlet {
     }
 
 
-    protected ResourceBundle getResourceBundle(HttpServletRequest request) {
+    protected ResourceBundle getResourceBundle(final HttpServletRequest request) {
         return ResourceBundle.getBundle("locale/strings", new Locale(getLanguage(request)), new UTF8Control());
     }
 
-    protected String getString(HttpServletRequest request, String key) {
+    protected String getString(final HttpServletRequest request, final String key) {
         return getResourceBundle(request).getString(key);
     }
 

@@ -1,13 +1,19 @@
 package com.noveogroup.tulupov.guestbook.database;
 
-public interface DatabaseContract {
-    public interface GuestbookEntry {
-        String TABLE_NAME = "GuestbookEntry";
-        String ID = "id";
-        String FIRST_NAME = "first_name";
-        String LAST_NAME = "last_name";
-        String EMAIL = "email";
-        String USER_AGENT = "user_agent";
-        String MESSAGE = "message";
+/**
+ * Database contract.
+ */
+public class DatabaseContract {
+    /**
+     * Guestbook entity contract.
+     */
+    public static class  GuestbookEntry {
+        public static final String TABLE_NAME = "GuestbookEntry";
+        public static final String ID = "id";
+        public static final String FIRST_NAME = "first_name";
+        public static final String LAST_NAME = "last_name";
+        public static final String EMAIL = "email";
+        public static final String USER_AGENT = "user_agent";
+        public static final String MESSAGE = "message";
     }
 }

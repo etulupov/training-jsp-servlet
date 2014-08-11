@@ -6,14 +6,17 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-
-public class LocalizationServlet extends BaseServlet {
+/**
+ * Localize servlet.
+ */
+public class LocalizationServlet extends AbstractServlet {
 
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+    protected void doGet(final HttpServletRequest request, final HttpServletResponse response) throws
+            ServletException, IOException {
         super.doGet(request, response);
 
-        RequestDispatcher requestDispatcher = request.getRequestDispatcher(uiControllerName);
+        final RequestDispatcher requestDispatcher = request.getRequestDispatcher(uiControllerName);
         requestDispatcher.forward(request, response);
     }
 }

@@ -4,6 +4,9 @@ package com.noveogroup.tulupov.guestbook.model;
 import lombok.Getter;
 import lombok.Setter;
 
+/**
+ * Page model.
+ */
 public class Page {
     @Getter
     @Setter

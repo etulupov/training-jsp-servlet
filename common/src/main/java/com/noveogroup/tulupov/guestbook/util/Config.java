@@ -7,7 +7,10 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
-public class Config {
+/**
+ * Config holder.
+ */
+public final class Config {
     public static final Config INSTANCE = new Config();
     private static final Logger LOGGER = Logger.getLogger(Config.class);
     private Properties properties;
@@ -24,12 +27,12 @@ public class Config {
             if (is != null) {
                 try {
                     is.close();
-                } catch (IOException ignored) {
+                } catch (IOException e) {
+                    LOGGER.error("Error", e);
                 }
             }
 
         }
-
     }
 
 

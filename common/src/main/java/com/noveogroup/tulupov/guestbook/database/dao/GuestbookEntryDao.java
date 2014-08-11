@@ -6,6 +6,9 @@ import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * Guestbook entity dao.
+ */
 public interface GuestbookEntryDao extends Dao<GuestbookEntry, Integer> {
     long getCount() throws SQLException;
 
