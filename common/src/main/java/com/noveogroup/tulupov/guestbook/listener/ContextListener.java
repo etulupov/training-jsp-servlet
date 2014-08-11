@@ -4,6 +4,7 @@ import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.util.Config;
+import com.noveogroup.tulupov.guestbook.util.DataUtils;
 import org.apache.log4j.Logger;
 
 import javax.servlet.ServletContext;
@@ -32,7 +33,7 @@ public class ContextListener implements ServletContextListener {
 
             TableUtils.createTableIfNotExists(connectionSource, GuestbookEntry.class);
 
-
+            DataUtils.fillGuestbookEntryIfNotExists(connectionSource);
 
             context.setAttribute(CONNECTION_SOURCE, connectionSource);
         } catch (Exception e) {
