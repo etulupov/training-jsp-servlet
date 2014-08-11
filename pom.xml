@@ -1,25 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <!--<pluginRepositories>-->
-        <!--<pluginRepository>-->
-            <!--<id>Codehaus Snapshots</id>-->
-            <!--<url>https://nexus.codehaus.org/content/repositories/codehaus-snapshots</url>-->
-        <!--</pluginRepository>-->
-        <!--<pluginRepository>-->
-            <!--<id>apache.snapshots</id>-->
-            <!--<name>Apache Snapshots</name>-->
-            <!--<url>http://people.apache.org/repo/m2-snapshot-repository</url>-->
-            <!--<releases>-->
-                <!--<enabled>false</enabled>-->
-            <!--</releases>-->
-            <!--<snapshots>-->
-                <!--<enabled>true</enabled>-->
-            <!--</snapshots>-->
-        <!--</pluginRepository>-->
+    <!--<pluginRepository>-->
+    <!--<id>Codehaus Snapshots</id>-->
+    <!--<url>https://nexus.codehaus.org/content/repositories/codehaus-snapshots</url>-->
+    <!--</pluginRepository>-->
+    <!--<pluginRepository>-->
+    <!--<id>apache.snapshots</id>-->
+    <!--<name>Apache Snapshots</name>-->
+    <!--<url>http://people.apache.org/repo/m2-snapshot-repository</url>-->
+    <!--<releases>-->
+    <!--<enabled>false</enabled>-->
+    <!--</releases>-->
+    <!--<snapshots>-->
+    <!--<enabled>true</enabled>-->
+    <!--</snapshots>-->
+    <!--</pluginRepository>-->
     <!--</pluginRepositories>-->
-
-
 
     <modelVersion>4.0.0</modelVersion>
 
@@ -35,6 +34,8 @@
         <maven-compiler-plugin.target>1.7</maven-compiler-plugin.target>
         <tomcat7-maven-plugin.version>2.2</tomcat7-maven-plugin.version>
         <war-plugin.version>2.1.1</war-plugin.version>
+        <maven.checkstyle.plugin.version>2.12.1</maven.checkstyle.plugin.version>
+        <checkstyle.file>checkstyle.xml</checkstyle.file>
     </properties>
 
     <dependencies>
@@ -135,9 +136,37 @@
         </pluginManagement>
     </build>
 
-  <modules>
-    <module>view-jsp</module>
-    <module>view-servlet</module>
-    <module>common</module>
-  </modules>
+    <profiles>
+        <profile>
+            <id>checkstyle</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-checkstyle-plugin</artifactId>
+                        <version>${maven.checkstyle.plugin.version}</version>
+                        <configuration>
+                            <consoleOutput>true</consoleOutput>
+                            <configLocation>${checkstyle.file}</configLocation>
+                            <includeTestSourceDirectory>true</includeTestSourceDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>check</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
+    <modules>
+        <module>view-jsp</module>
+        <module>view-servlet</module>
+        <module>common</module>
+    </modules>
 </project>
