@@ -1,7 +1,9 @@
 package com.noveogroup.tulupov.guestbook.servlet;
 
 import com.noveogroup.tulupov.guestbook.database.dao.GuestbookEntryDao;
-import com.noveogroup.tulupov.guestbook.filter.DaoServletFilter;
+import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
+import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
+import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
 import com.noveogroup.tulupov.guestbook.listener.SessionListener;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.model.Page;
@@ -70,10 +72,10 @@ public class GuestbookServlet extends AbstractServlet {
         super.doGet(request, response);
         fillForm(request);
         restoreAttributes(request);
-        final GuestbookEntryDao guestbookEntryDao =
-                (GuestbookEntryDao) request.getAttribute(DaoServletFilter.GUESTBOOK_ENTRY_DAO);
+        final GuestbookEntryService guestbookEntryService =
+                (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
         try {
-            final long total = guestbookEntryDao.getCount();
+            final long total = guestbookEntryService.getCount();
             long page = 0;
             try {
 
@@ -87,7 +89,7 @@ public class GuestbookServlet extends AbstractServlet {
             final long offset = config.getPageLimit() * page;
             final List<Page> pages = PaginationUtils.paginize(total, config.getPageLimit(), page);
 
-            final List<GuestbookEntry> entries = guestbookEntryDao.getEntries(offset, config.getPageLimit());
+            final List<GuestbookEntry> entries = guestbookEntryService.getEntries(offset, config.getPageLimit());
 
             request.setAttribute("rootUrl", request.getContextPath());
             request.setAttribute("entries", entries);
@@ -98,8 +100,8 @@ public class GuestbookServlet extends AbstractServlet {
             final RequestDispatcher requestDispatcher = request.getRequestDispatcher(uiControllerName);
             requestDispatcher.forward(request, response);
 
-        } catch (SQLException e) {
-            e.printStackTrace();
+        } catch (ServiceException e) {
+            addErrorMessage(request, e.getMessage());
         }
     }
 }

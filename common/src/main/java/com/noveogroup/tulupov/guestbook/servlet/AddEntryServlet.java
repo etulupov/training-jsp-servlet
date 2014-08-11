@@ -1,7 +1,10 @@
 package com.noveogroup.tulupov.guestbook.servlet;
 
 import com.noveogroup.tulupov.guestbook.database.dao.GuestbookEntryDao;
-import com.noveogroup.tulupov.guestbook.filter.DaoServletFilter;
+import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
+import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
+import com.noveogroup.tulupov.guestbook.database.service.ValidationException;
+import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.util.StringUtils;
 import org.apache.log4j.Logger;
@@ -74,23 +77,19 @@ public class AddEntryServlet extends AbstractServlet {
         entry.setMessage(getParam(request, PARAM_MESSAGE));
         entry.setUserAgent(request.getHeader("User-Agent"));
 
+        final GuestbookEntryService guestbookEntryService =
+                (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
 
-        final ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
-        final Validator validator = vf.getValidator();
-
-        final Set<ConstraintViolation<GuestbookEntry>> constraintViolations = validator
-                .validate(entry);
-
-        for (ConstraintViolation<GuestbookEntry> cv : constraintViolations) {
-            LOGGER.error("Validation error: " + cv.getMessage());
-            addErrorMessage(request, getString(request, cv.getMessage()));
-        }
-
-        if (constraintViolations.isEmpty()) {
-            final GuestbookEntryDao guestbookEntryDao =
-                    (GuestbookEntryDao) request.getAttribute(DaoServletFilter.GUESTBOOK_ENTRY_DAO);
-            guestbookEntryDao.create(entry);
+        try {
+            guestbookEntryService.create(entry);
             return true;
+        } catch (ValidationException e) {
+            for (ConstraintViolation<GuestbookEntry> cv : e.getResults()) {
+                LOGGER.error("Validation error: " + cv.getMessage());
+                addErrorMessage(request, getString(request, cv.getMessage()));
+            }
+        } catch (ServiceException e) {
+            addErrorMessage(request, getString(request, e.getMessage()));
         }
 
         return false;

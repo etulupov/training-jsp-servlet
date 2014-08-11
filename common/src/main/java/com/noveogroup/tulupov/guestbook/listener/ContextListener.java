@@ -32,6 +32,8 @@ public class ContextListener implements ServletContextListener {
 
             TableUtils.createTableIfNotExists(connectionSource, GuestbookEntry.class);
 
+
+
             context.setAttribute(CONNECTION_SOURCE, connectionSource);
         } catch (Exception e) {
             LOGGER.error("Error", e);
