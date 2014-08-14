@@ -33,7 +33,8 @@ public class ServiceServletFilter implements Filter {
                 (ConnectionSource) context.getAttribute(ContextListener.CONNECTION_SOURCE);
 
         final GuestbookEntryDao guestbookEntryDao = GuestbookEntryDaoFactory.getInstance().get(connectionSource);
-        final GuestbookEntryService guestbookEntryService = GuestbookEntryServiceFactory.getInstance().get(guestbookEntryDao);
+        final GuestbookEntryService guestbookEntryService =
+                GuestbookEntryServiceFactory.getInstance().get(guestbookEntryDao);
 
         req.setAttribute(GUESTBOOK_ENTRY_SERVICE, guestbookEntryService);
 

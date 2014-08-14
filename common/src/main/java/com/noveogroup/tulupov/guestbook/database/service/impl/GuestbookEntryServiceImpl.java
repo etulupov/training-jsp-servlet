@@ -15,11 +15,14 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Set;
 
+/**
+ * GusetbookEntry service.
+ */
 @Slf4j
 public class GuestbookEntryServiceImpl implements GuestbookEntryService {
     private GuestbookEntryDao dao;
 
-    public GuestbookEntryServiceImpl(GuestbookEntryDao dao) {
+    public GuestbookEntryServiceImpl(final GuestbookEntryDao dao) {
         this.dao = dao;
     }
 
@@ -28,22 +31,22 @@ public class GuestbookEntryServiceImpl implements GuestbookEntryService {
         try {
             return dao.getCount();
         } catch (SQLException e) {
-            log.error("Error", e);
+            log.error("Error get count", e);
             throw new ServiceException("Get count error", e);
         }
     }
 
     @Override
-    public List<GuestbookEntry> getEntries(long offset, long count) {
+    public List<GuestbookEntry> getEntries(final long offset, final  long count) {
         try {
             return dao.getEntries(offset, count);
         } catch (SQLException e) {
-            log.error("Error", e);
+            log.error("Error list", e);
             throw new ServiceException("Cannot get GuestbookEntries", e);
         }
     }
 
-    public void create(GuestbookEntry entry) {
+    public void create(final GuestbookEntry entry) {
         try {
             final ValidatorFactory vf = Validation.buildDefaultValidatorFactory();
             final Validator validator = vf.getValidator();
@@ -54,11 +57,10 @@ public class GuestbookEntryServiceImpl implements GuestbookEntryService {
             if (constraintViolations.isEmpty()) {
                 dao.create(entry);
             } else {
-
                 throw new ValidationException(constraintViolations);
             }
         } catch (SQLException e) {
-            log.error("Error", e);
+            log.error("Error create", e);
             throw new ServiceException("Cannot create GuestbookEntry", e);
         }
     }

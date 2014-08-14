@@ -1,6 +1,5 @@
 package com.noveogroup.tulupov.guestbook.servlet;
 
-import com.noveogroup.tulupov.guestbook.database.dao.GuestbookEntryDao;
 import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
 import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
@@ -17,7 +16,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**

@@ -19,14 +19,15 @@ public final class DataUtils {
 
     }
 
-    public static void fillGuestbookEntryIfNotExists(ConnectionSource connectionSource) {
+    public static void fillGuestbookEntryIfNotExists(final ConnectionSource connectionSource) {
         final GuestbookEntryDao guestbookEntryDao = GuestbookEntryDaoFactory.getInstance().get(connectionSource);
-        final GuestbookEntryService guestbookEntryService = GuestbookEntryServiceFactory.getInstance().get(guestbookEntryDao);
+        final GuestbookEntryService guestbookEntryService =
+                GuestbookEntryServiceFactory.getInstance().get(guestbookEntryDao);
         try {
             log.debug("Check table " + guestbookEntryService.getCount());
             if (guestbookEntryService.getCount() == 0) {
                 for (int i = 0; i < ITEMS_COUNT; i++) {
-                    GuestbookEntry entry = new GuestbookEntry();
+                    final GuestbookEntry entry = new GuestbookEntry();
 
                     entry.setFirstName("Vasya");
                     entry.setLastName("Pupkin");

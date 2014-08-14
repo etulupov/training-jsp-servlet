@@ -9,22 +9,23 @@ import com.noveogroup.tulupov.guestbook.util.AbstractFactory;
  * GusetbookEntry dao factory.
  */
 public final class GuestbookEntryDaoFactory extends AbstractFactory<GuestbookEntryDao, ConnectionSource> {
-    private static GuestbookEntryDaoFactory INSTANCE;
+    private static volatile GuestbookEntryDaoFactory instance;
+
+    public GuestbookEntryDaoFactory() {
+        super(GuestbookEntryDaoImpl.class, ConnectionSource.class);
+    }
 
     public static GuestbookEntryDaoFactory getInstance() {
-        GuestbookEntryDaoFactory result = INSTANCE;
+        GuestbookEntryDaoFactory result = instance;
         if (result == null) {
             synchronized (GuestbookEntryDaoFactory.class) {
-                result = INSTANCE;
+                result = instance;
                 if (result == null) {
-                    INSTANCE = result = new GuestbookEntryDaoFactory();
+                    instance = new GuestbookEntryDaoFactory();
+                    result = instance;
                 }
             }
         }
         return result;
-    }
-
-    public GuestbookEntryDaoFactory() {
-        super(GuestbookEntryDaoImpl.class, ConnectionSource.class);
     }
 }

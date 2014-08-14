@@ -3,9 +3,11 @@ package com.noveogroup.tulupov.guestbook.database.service;
 
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 
-import java.sql.SQLException;
 import java.util.List;
 
+/**
+ * GusetbookEntry service.
+ */
 public interface GuestbookEntryService {
     long getCount();
 

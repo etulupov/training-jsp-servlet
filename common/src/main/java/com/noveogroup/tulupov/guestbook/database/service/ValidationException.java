@@ -13,9 +13,9 @@ import java.util.Set;
  */
 public class ValidationException extends RuntimeException {
     @Getter
-    private Set<ConstraintViolation<GuestbookEntry>> results;
+    private final Set<ConstraintViolation<GuestbookEntry>> results;
 
-    public ValidationException(Set<ConstraintViolation<GuestbookEntry>> results) {
+    public ValidationException(final Set<ConstraintViolation<GuestbookEntry>> results) {
         this.results = results;
     }
 }

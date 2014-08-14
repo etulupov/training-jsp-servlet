@@ -11,7 +11,7 @@ import java.util.Properties;
  * Config holder.
  */
 public final class Config {
-    private static volatile Config INSTANCE;
+    private static volatile Config instance;
     private static final Logger LOGGER = Logger.getLogger(Config.class);
     private Properties properties;
 
@@ -37,12 +37,13 @@ public final class Config {
 
 
     public static Config getInstance() {
-        Config result = INSTANCE;
+        Config result = instance;
         if (result == null) {
             synchronized (Config.class) {
-                result = INSTANCE;
+                result = instance;
                 if (result == null) {
-                    INSTANCE = result = new Config();
+                    instance = new Config();
+                    result = instance;
                 }
             }
         }

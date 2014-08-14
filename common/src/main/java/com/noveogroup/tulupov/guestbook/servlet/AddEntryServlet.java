@@ -1,6 +1,5 @@
 package com.noveogroup.tulupov.guestbook.servlet;
 
-import com.noveogroup.tulupov.guestbook.database.dao.GuestbookEntryDao;
 import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
 import com.noveogroup.tulupov.guestbook.database.service.ValidationException;
@@ -16,11 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.io.IOException;
-import java.util.Set;
 
 /**
  * Adds new guestbook entry.
@@ -44,7 +39,7 @@ public class AddEntryServlet extends AbstractServlet {
             ServletException, IOException {
         super.doPost(request, response);
 
-        Form form = new Form();
+        final Form form = new Form();
         request.setAttribute(FORM, form);
 
         try {
