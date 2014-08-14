@@ -25,7 +25,8 @@
                 <li><a href="$rootUrl">$lang.getString("home")</a></li>
                 <li><a href="#post">$lang.getString("new_message")</a></li>
                 <li class="dropdown">
-                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">$lang.getString("language") <b class="caret"></b></a>
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">$lang.getString("language") <b
+                            class="caret"></b></a>
                     <ul class="dropdown-menu">
                         <li><a href="?language=en"><img src="image/en.png" alt=""/> $lang.getString("language_english")
                         </a></li>
@@ -64,36 +65,49 @@
         <form class="form-horizontal" role="form" id="add-form" method="post" action="add">
             <fieldset>
                 <legend><h3>$lang.getString("new_message")</h3></legend>
-                <div class="form-group">
+                <div class="form-group $form.getErrorCss("firstName")">
                     <label for="first_name" class="col-sm-2 control-label">$lang.getString("first_name")</label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="first_name" name="first_name"
                                placeholder="$lang.getString("first_name_hint")" value="$first_name">
+                        #if ($form.hasError("firstName"))
+                            <small class="help-block">$form.getErrorMessage("firstName")</small>
+                        #end
                     </div>
+
                 </div>
-                <div class="form-group">
+                <div class="form-group $form.getErrorCss("lastName")">
                     <label for="last_name" class="col-sm-2 control-label">$lang.getString("last_name")</label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="last_name" name="last_name"
                                placeholder="$lang.getString("last_name_hint")" value="$last_name">
+                        #if ($form.hasError("lastName"))
+                            <small class="help-block">$form.getErrorMessage("lastName")</small>
+                        #end
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group $form.getErrorCss("email")">
                     <label for="email" class="col-sm-2 control-label">$lang.getString("email")</label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="email" name="email"
                                placeholder="$lang.getString("email_hint")" value="$email">
+                        #if ($form.hasError("email"))
+                            <small class="help-block">$form.getErrorMessage("email")</small>
+                        #end
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group $form.getErrorCss("message")">
                     <label for="message" class="col-sm-2 control-label">$lang.getString("message")</label>
 
                     <div class="col-sm-4">
                         <textarea class="form-control" id="message" name="message"
                                   placeholder="$lang.getString("message_hint")">$message</textarea>
+                        #if ($form.hasError("message"))
+                            <small class="help-block">$form.getErrorMessage("message")</small>
+                        #end
                     </div>
                 </div>
                 <div class="form-group">

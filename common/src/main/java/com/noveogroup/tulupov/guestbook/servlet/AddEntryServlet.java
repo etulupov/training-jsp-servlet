@@ -5,6 +5,7 @@ import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
 import com.noveogroup.tulupov.guestbook.database.service.ValidationException;
 import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
+import com.noveogroup.tulupov.guestbook.model.Form;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.util.StringUtils;
 import org.apache.log4j.Logger;
@@ -43,11 +44,27 @@ public class AddEntryServlet extends AbstractServlet {
             ServletException, IOException {
         super.doPost(request, response);
 
+        Form form = new Form();
+        request.setAttribute(FORM, form);
+
         try {
-            if (parseParameters(request)) {
+            final GuestbookEntry entry = parseParameters(request);
+
+            final GuestbookEntryService guestbookEntryService =
+                    (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
+
+            try {
+                guestbookEntryService.create(entry);
                 setSuccess(request, getString(request, "success_add"));
-            } else {
+            } catch (ValidationException e) {
                 saveParameters(request);
+                for (ConstraintViolation<GuestbookEntry> cv : e.getResults()) {
+                    LOGGER.error("Validation error: " + cv.getMessage());
+                    form.put(cv.getPropertyPath().toString(), getString(request, cv.getMessage()));
+                }
+            } catch (ServiceException e) {
+                saveParameters(request);
+                addErrorMessage(request, getString(request, e.getMessage()));
             }
         } catch (Exception e) {
             LOGGER.error("Error", e);
@@ -68,7 +85,7 @@ public class AddEntryServlet extends AbstractServlet {
         }
     }
 
-    private boolean parseParameters(final HttpServletRequest request) throws Exception {
+    private GuestbookEntry parseParameters(final HttpServletRequest request) throws Exception {
         final GuestbookEntry entry = new GuestbookEntry();
 
         entry.setFirstName(getParam(request, PARAM_FIRST_NAME));
@@ -77,22 +94,7 @@ public class AddEntryServlet extends AbstractServlet {
         entry.setMessage(getParam(request, PARAM_MESSAGE));
         entry.setUserAgent(request.getHeader("User-Agent"));
 
-        final GuestbookEntryService guestbookEntryService =
-                (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
-
-        try {
-            guestbookEntryService.create(entry);
-            return true;
-        } catch (ValidationException e) {
-            for (ConstraintViolation<GuestbookEntry> cv : e.getResults()) {
-                LOGGER.error("Validation error: " + cv.getMessage());
-                addErrorMessage(request, getString(request, cv.getMessage()));
-            }
-        } catch (ServiceException e) {
-            addErrorMessage(request, getString(request, e.getMessage()));
-        }
-
-        return false;
+        return entry;
     }
 
 

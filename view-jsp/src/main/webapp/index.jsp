@@ -71,40 +71,52 @@
         <form class="form-horizontal" role="form" id="add-form" method="post" action="add">
             <fieldset>
                 <legend><h3><lang:i18n key="new_message"/></h3></legend>
-                <div class="form-group">
+                <div class="form-group ${form.getErrorCss("firstName")}">
                     <label for="first_name" class="col-sm-2 control-label"><lang:i18n key="first_name"/></label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="first_name" name="first_name"
                                placeholder="<lang:i18n key="first_name_hint"/>"
                                value="<c:out value="${requestScope.first_name}"/>"/>
+                        <c:if test="${form.hasError('firstName')}">
+                            <small class="help-block">${form.getErrorMessage("firstName")}</small>
+                        </c:if>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ${form.getErrorCss("lastName")}">
                     <label for="last_name" class="col-sm-2 control-label"><lang:i18n key="last_name"/></label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="last_name" name="last_name"
                                placeholder="<lang:i18n key="last_name_hint"/>"
                                value="<c:out value="${requestScope.last_name}"/>"/>
+                        <c:if test="${form.hasError('lastName')}">
+                            <small class="help-block">${form.getErrorMessage("lastName")}</small>
+                        </c:if>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ${form.getErrorCss("email")}">
                     <label for="email" class="col-sm-2 control-label"><lang:i18n key="email"/></label>
 
                     <div class="col-sm-4">
                         <input type="text" class="form-control" id="email" name="email"
                                placeholder="<lang:i18n key="email_hint"/>"
                                value="<c:out value="${requestScope.email}"/>"/>
+                        <c:if test="${form.hasError('email')}">
+                            <small class="help-block">${form.getErrorMessage("email")}</small>
+                        </c:if>
                     </div>
                 </div>
-                <div class="form-group">
+                <div class="form-group ${form.getErrorCss("message")}">
                     <label for="message" class="col-sm-2 control-label"><lang:i18n key="message"/></label>
 
                     <div class="col-sm-4">
                         <textarea class="form-control" id="message" name="message"
                                   placeholder="<lang:i18n key="message_hint"/>"><c:out
                                 value="${requestScope.message}"/></textarea>
+                        <c:if test="${form.hasError('message')}">
+                            <small class="help-block">${form.getErrorMessage("message")}</small>
+                        </c:if>
                     </div>
                 </div>
                 <div class="form-group">

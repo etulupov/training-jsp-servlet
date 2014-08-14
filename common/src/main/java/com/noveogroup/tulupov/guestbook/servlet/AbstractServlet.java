@@ -22,6 +22,7 @@ public abstract class AbstractServlet extends HttpServlet {
     public static final String LANGUAGE_MAP = "lang";
     public static final String ERROR = "error";
     public static final String SUCCESS = "success";
+    public static final String FORM = "form";
     public static final String DEFAULT_LANGUAGE = "en";
 
     protected String uiControllerName;
@@ -46,7 +47,7 @@ public abstract class AbstractServlet extends HttpServlet {
 
     protected void saveAttributes(final HttpServletRequest request) {
         final HttpSession session = request.getSession(true);
-        final String[] names = {ERROR, SUCCESS};
+        final String[] names = {ERROR, SUCCESS, FORM};
         for (String name : names) {
             session.setAttribute(name, request.getAttribute(name));
         }
@@ -55,7 +56,7 @@ public abstract class AbstractServlet extends HttpServlet {
     protected void restoreAttributes(final HttpServletRequest request) {
         final HttpSession session = request.getSession(true);
 
-        final String[] names = {ERROR, SUCCESS};
+        final String[] names = {ERROR, SUCCESS, FORM};
         for (String name : names) {
             request.setAttribute(name, session.getAttribute(name));
             session.removeAttribute(name);
