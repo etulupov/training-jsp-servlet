@@ -2,7 +2,7 @@ package com.noveogroup.tulupov.guestbook.servlet;
 
 import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
-import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
+import com.noveogroup.tulupov.guestbook.database.service.impl.GuestbookEntryServiceImpl;
 import com.noveogroup.tulupov.guestbook.listener.SessionListener;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.model.Page;
@@ -70,8 +70,8 @@ public class GuestbookServlet extends AbstractServlet {
         super.doGet(request, response);
         fillForm(request);
         restoreAttributes(request);
-        final GuestbookEntryService guestbookEntryService =
-                (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
+        final GuestbookEntryService guestbookEntryService = GuestbookEntryServiceImpl.getInstance();
+
         try {
             final long total = guestbookEntryService.getCount();
             long page = 0;

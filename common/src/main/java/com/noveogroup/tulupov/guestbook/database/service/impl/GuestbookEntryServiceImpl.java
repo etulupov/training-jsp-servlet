@@ -1,6 +1,7 @@
 package com.noveogroup.tulupov.guestbook.database.service.impl;
 
 import com.noveogroup.tulupov.guestbook.database.dao.GuestbookEntryDao;
+import com.noveogroup.tulupov.guestbook.database.dao.impl.GuestbookEntryDaoImpl;
 import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
 import com.noveogroup.tulupov.guestbook.database.service.ValidationException;
@@ -20,10 +21,25 @@ import java.util.Set;
  */
 @Slf4j
 public class GuestbookEntryServiceImpl implements GuestbookEntryService {
+    private static volatile GuestbookEntryService instance;
     private GuestbookEntryDao dao;
 
     public GuestbookEntryServiceImpl(final GuestbookEntryDao dao) {
         this.dao = dao;
+    }
+
+    public static GuestbookEntryService getInstance() {
+        GuestbookEntryService result = instance;
+        if (result == null) {
+            synchronized (GuestbookEntryServiceImpl.class) {
+                result = instance;
+                if (result == null) {
+                    instance = new GuestbookEntryServiceImpl(GuestbookEntryDaoImpl.getInstance());
+                    result = instance;
+                }
+            }
+        }
+        return result;
     }
 
     @Override
@@ -37,7 +53,7 @@ public class GuestbookEntryServiceImpl implements GuestbookEntryService {
     }
 
     @Override
-    public List<GuestbookEntry> getEntries(final long offset, final  long count) {
+    public List<GuestbookEntry> getEntries(final long offset, final long count) {
         try {
             return dao.getEntries(offset, count);
         } catch (SQLException e) {

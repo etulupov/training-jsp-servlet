@@ -2,6 +2,7 @@ package com.noveogroup.tulupov.guestbook.listener;
 
 import com.j256.ormlite.jdbc.JdbcPooledConnectionSource;
 import com.j256.ormlite.table.TableUtils;
+import com.noveogroup.tulupov.guestbook.database.dao.impl.GuestbookEntryDaoImpl;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.util.Config;
 import com.noveogroup.tulupov.guestbook.util.DataUtils;
@@ -17,8 +18,6 @@ import javax.servlet.annotation.WebListener;
  */
 @WebListener
 public class ContextListener implements ServletContextListener {
-    public static final String CONNECTION_SOURCE = "connection_source";
-
     private static final Logger LOGGER = Logger.getLogger(ContextListener.class);
 
     @Override
@@ -31,11 +30,13 @@ public class ContextListener implements ServletContextListener {
             final JdbcPooledConnectionSource connectionSource =
                     new JdbcPooledConnectionSource(config.getJdbcUrl(), config.getJdbcUser(), config.getJdbcPassword());
 
+            GuestbookEntryDaoImpl.init(connectionSource);
+
             TableUtils.createTableIfNotExists(connectionSource, GuestbookEntry.class);
 
             DataUtils.fillGuestbookEntryIfNotExists(connectionSource);
 
-            context.setAttribute(CONNECTION_SOURCE, connectionSource);
+
         } catch (Exception e) {
             LOGGER.error("Error", e);
         }

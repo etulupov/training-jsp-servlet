@@ -3,7 +3,7 @@ package com.noveogroup.tulupov.guestbook.servlet;
 import com.noveogroup.tulupov.guestbook.database.service.GuestbookEntryService;
 import com.noveogroup.tulupov.guestbook.database.service.ServiceException;
 import com.noveogroup.tulupov.guestbook.database.service.ValidationException;
-import com.noveogroup.tulupov.guestbook.filter.ServiceServletFilter;
+import com.noveogroup.tulupov.guestbook.database.service.impl.GuestbookEntryServiceImpl;
 import com.noveogroup.tulupov.guestbook.model.Form;
 import com.noveogroup.tulupov.guestbook.model.GuestbookEntry;
 import com.noveogroup.tulupov.guestbook.util.StringUtils;
@@ -45,8 +45,7 @@ public class AddEntryServlet extends AbstractServlet {
         try {
             final GuestbookEntry entry = parseParameters(request);
 
-            final GuestbookEntryService guestbookEntryService =
-                    (GuestbookEntryService) request.getAttribute(ServiceServletFilter.GUESTBOOK_ENTRY_SERVICE);
+            final GuestbookEntryService guestbookEntryService = GuestbookEntryServiceImpl.getInstance();
 
             try {
                 guestbookEntryService.create(entry);
