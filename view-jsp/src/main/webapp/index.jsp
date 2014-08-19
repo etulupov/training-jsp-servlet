@@ -1,7 +1,8 @@
 <%@ page contentType="text/html; encoding=utf-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
-<%@ taglib prefix="lang" uri="WEB-INF/custom.tld" %>
+<%@ taglib prefix="lang" uri="/WEB-INF/custom.tld" %>
+<%@ taglib prefix="my" tagdir="/WEB-INF/tags" %>
 
 <!DOCTYPE html>
 <html>
@@ -128,46 +129,16 @@
         </form>
     </div>
 
+    <my:paginator/>
+
     <div>
         <div class="page-header"><h3><lang:i18n key="messages_title"/></h3></div>
-        <div class="list-group">
-            <c:forEach items="${entries}" var="entry">
-                <div class="list-group-item">
-                    <h4 class="list-group-item-heading"><strong><c:out value="${entry.firstName}"/> <c:out
-                            value="${entry.lastName}"/></strong> (<a
-                            href="mailto:<c:out value="${entry.email}"/>"><c:out value="${entry.email}"/></a>) </h4>
 
-                    <p class="list-group-item-hint"><lang:i18n key="message_sent_via"/><c:out
-                            value="${entry.userAgent}"/></p>
-
-                    <p class="list-group-item-text"><c:out
-                            value="${entry.message}" escapeXml="false"/></p>
-                </div>
-            </c:forEach>
-        </div>
+        <lang:messages/>
     </div>
-    <c:if test="${pages != null}">
-        <div class="pages">
-            <ul class="pagination">
-                <c:forEach items="${pages}" var="page">
-                    <c:choose>
-                        <c:when test="${page.active}">
-                            <li class="active"><a href="?page=<c:out value="${page.number}"/>"><c:out
-                                    value="${page.title}" escapeXml="false"/></a></li>
-                        </c:when>
-                        <c:when test="${page.disabled}">
-                            <li class="disabled"><a href="?page=<c:out value="${page.number}"/>"><c:out
-                                    value="${page.title}" escapeXml="false"/></a></li>
-                        </c:when>
-                        <c:otherwise>
-                            <li><a href="?page=<c:out value="${page.number}"/>"><c:out value="${page.title}"
-                                                                                       escapeXml="false"/></a></li>
-                        </c:otherwise>
-                    </c:choose>
-                </c:forEach>
-            </ul>
-        </div>
-    </c:if>
+
+    <my:paginator/>
+
 </div>
 
 
